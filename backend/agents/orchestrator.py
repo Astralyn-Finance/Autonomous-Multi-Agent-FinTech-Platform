@@ -6,19 +6,19 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 
-from backend.agents.sentiment_pipeline import build_sentiment_views
-from backend.optimizers.admm_sparse import ADMMOptimizer
-from backend.optimizers.base import OptimizationResult
-from backend.optimizers.black_litterman import BlackLittermanOptimizerAgent
-from backend.optimizers.miqp import MIQPOptimizer
-from backend.optimizers.mvo_qp import MVOQPOptimizer
-from backend.optimizers.proximal_gradient import ProximalGradientOptimizer
-from backend.optimization.feasibility_checker import FeasibilityChecker
-from backend.optimization.optimizer_selector import (
+from agents.sentiment_pipeline import build_sentiment_views
+from optimizers.admm_sparse import ADMMOptimizer
+from optimizers.base import OptimizationResult
+from optimizers.black_litterman import BlackLittermanOptimizerAgent
+from optimizers.miqp import MIQPOptimizer
+from optimizers.mvo_qp import MVOQPOptimizer
+from optimizers.proximal_gradient import ProximalGradientOptimizer
+from optimization.feasibility_checker import FeasibilityChecker
+from optimization.optimizer_selector import (
     OptimizerRecommender,
     UserPortfolioRequirements,
 )
-from backend.optimization.constraint_validator import IndependentPortfolioValidator, ValidationReport
+from optimization.constraint_validator import IndependentPortfolioValidator, ValidationReport
 
 logger = logging.getLogger(__name__)
 

@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import pandas as pd
-from backend.agents.constraint_agent import ConstraintExtractionAgent
-from backend.data.data_fetcher import load_nifty50_data
-from backend.agents.orchestrator import PortfolioOrchestrator
+from agents.constraint_agent import ConstraintExtractionAgent
+from data.data_fetcher import load_nifty50_data
+from agents.orchestrator import PortfolioOrchestrator
 
 
 def main():

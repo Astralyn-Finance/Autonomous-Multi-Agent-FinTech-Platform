@@ -7,8 +7,8 @@ from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
 import pandas as pd
 
-from backend.agents.constraint_agent import ConstraintExtractionAgent
-from backend.agents.orchestrator import PortfolioOrchestrator
+from agents.constraint_agent import ConstraintExtractionAgent
+from agents.orchestrator import PortfolioOrchestrator
 
 router = APIRouter()
 agent = ConstraintExtractionAgent()

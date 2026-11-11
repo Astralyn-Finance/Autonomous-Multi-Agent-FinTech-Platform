@@ -264,42 +264,42 @@ RESEARCH INPUT:
         )
 
 
-def finalize_confidences(result: SentimentResearchResult,
-                         accepted_recommendations: Optional[set[str]] = None,
-                         confidence_overrides: Optional[dict[str, float]] = None) -> ApprovedSentimentInputs:
-    """Finalize confidence only after an explicit user decision per proposal.
+    def finalize_confidences(result: SentimentResearchResult,
+                            accepted_recommendations: Optional[set[str]] = None,
+                            confidence_overrides: Optional[dict[str, float]] = None) -> ApprovedSentimentInputs:
+        """Finalize confidence only after an explicit user decision per proposal.
 
-    Every proposed ticker must appear in exactly one of:
-      * ``accepted_recommendations``: use Gemini's recommended confidence;
-      * ``confidence_overrides``: use the user's own confidence value.
+        Every proposed ticker must appear in exactly one of:
+        * ``accepted_recommendations``: use Gemini's recommended confidence;
+        * ``confidence_overrides``: use the user's own confidence value.
 
-    Missing decisions raise an error; no default or silent auto-approval exists.
-    """
-    accepted = {str(t).upper() for t in (accepted_recommendations or set())}
-    overrides = {str(t).upper(): v for t, v in (confidence_overrides or {}).items()}
-    proposed = set(result.proposals)
-    unknown = (accepted | set(overrides)) - proposed
-    if unknown:
-        raise ValueError(f"Confidence decision supplied for unknown ticker(s): {sorted(unknown)}")
-    overlap = accepted & set(overrides)
-    if overlap:
-        raise ValueError(f"Choose either accept or override for: {sorted(overlap)}")
-    unresolved = proposed - accepted - set(overrides)
-    if unresolved:
-        raise ValueError(f"User decision required for confidence of: {sorted(unresolved)}")
+        Missing decisions raise an error; no default or silent auto-approval exists.
+        """
+        accepted = {str(t).upper() for t in (accepted_recommendations or set())}
+        overrides = {str(t).upper(): v for t, v in (confidence_overrides or {}).items()}
+        proposed = set(result.proposals)
+        unknown = (accepted | set(overrides)) - proposed
+        if unknown:
+            raise ValueError(f"Confidence decision supplied for unknown ticker(s): {sorted(unknown)}")
+        overlap = accepted & set(overrides)
+        if overlap:
+            raise ValueError(f"Choose either accept or override for: {sorted(overlap)}")
+        unresolved = proposed - accepted - set(overrides)
+        if unresolved:
+            raise ValueError(f"User decision required for confidence of: {sorted(unresolved)}")
 
-    final_confidences = {}
-    for ticker in proposed:
-        if ticker in accepted:
-            final_confidences[ticker] = result.proposals[ticker].recommended_confidence
-        else:
-            value = float(overrides[ticker])
-            if not math.isfinite(value) or not 0.0 < value < 1.0:
-                raise ValueError(f"User confidence for {ticker} must be strictly between 0 and 1")
-            final_confidences[ticker] = value
+        final_confidences = {}
+        for ticker in proposed:
+            if ticker in accepted:
+                final_confidences[ticker] = result.proposals[ticker].recommended_confidence
+            else:
+                value = float(overrides[ticker])
+                if not math.isfinite(value) or not 0.0 < value < 1.0:
+                    raise ValueError(f"User confidence for {ticker} must be strictly between 0 and 1")
+                final_confidences[ticker] = value
 
-    return ApprovedSentimentInputs(
-        views=result.views,
-        confidences=final_confidences,
-        additional_notes={t: p.additional_note for t, p in result.proposals.items() if p.additional_note},
-    )
+        return ApprovedSentimentInputs(
+            views=result.views,
+            confidences=final_confidences,
+            additional_notes={t: p.additional_note for t, p in result.proposals.items() if p.additional_note},
+        )

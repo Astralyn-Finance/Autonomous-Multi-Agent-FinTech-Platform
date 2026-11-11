@@ -8,16 +8,16 @@ from __future__ import annotations
 import os
 from typing import Any, Dict, List, Optional
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException  
+from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import HTMLResponse
 from pydantic import BaseModel
 import pandas as pd
 
-from backend.agents.constraint_agent import ConstraintExtractionAgent
-from backend.data.data_fetcher import load_nifty50_data
-from backend.agents.orchestrator import PortfolioOrchestrator
-from backend.schemas.constraint_schema import UserPortfolioRequirements
+from agents.constraint_agent import ConstraintExtractionAgent
+from data.data_fetcher import load_nifty50_data
+from agents.orchestrator import PortfolioOrchestrator
+from schemas.constraint_schema import UserPortfolioRequirements
 
 load_dotenv()
 

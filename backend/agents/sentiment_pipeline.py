@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Iterable, Optional
 
 from data.source_router import get_fundamentals
-from agents.sentiment_agent import GeminiSentimentAgent
+from sentiment_agent import GeminiSentimentAgent
 
 def _extract_market_caps(tickers: Iterable[str]) -> dict[str, float]:
     """Retrieve market capitalization from source_router fundamentals policy.
@@ -57,7 +57,7 @@ def build_sentiment_views(tickers: Iterable[str], baseline_returns,
         prev_cap = prior_market_caps.get(ticker)
 
         try:
-            result = agent.analyze(
+            result = agent.generate_views(
                 ticker=ticker,
                 company_name=name,
                 current_market_cap=cur_cap,
@@ -69,7 +69,7 @@ def build_sentiment_views(tickers: Iterable[str], baseline_returns,
 
         baseline = float(baseline_returns.loc[ticker] if hasattr(baseline_returns, "loc")
                          else baseline_returns[ticker])
-        view, confidence = agent.to_expected_return_view(result, baseline, max_tilt=max_tilt)
+        view, confidence = agent.finalize_confidences(result, baseline, max_tilt=max_tilt)
         views[ticker] = view
         raw_results[ticker] = result
 
