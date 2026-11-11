@@ -1,0 +1,28 @@
+# FastAPI backend server and handles incoming API requests
+fastapi>=0.115
+uvicorn[standard]>=0.32
+google-genai
+
+# Database
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+
+# Configuration and Data Validation
+pydantic>=2.9
+pydantic-settings>=2.5
+python-dotenv>=1.0
+
+# Core optimization / data
+numpy
+pandas
+scipy
+cvxpy
+PySCIPOpt
+PyPortfolioOpt
+
+# Data sources
+yfinance
+requests
+
+# Testing
+pytest

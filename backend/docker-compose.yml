@@ -1,0 +1,35 @@
+service:
+  db:
+    image: timescale/timescaledb:latest-pg16
+    container_name: fintech_db
+    restart: unless_stopped
+    environment: 
+      POSTGRES_USER: fintech
+      POSTGRES_PASSWORD: fintechpgsql04
+      POSTGRES_DB: fintech
+    ports:
+      - "5432:5432"
+    volumes:
+      - fintech_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fintech"]
+      intervals: 5s
+      timeout: 5s
+      retries: 10
+  
+  api:
+    build: .
+    container_name: fintech_api
+    restsart: unless-stopped
+    depends_on: 
+      db:
+        condition: service_healthy
+    env_file: 
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .app/app/app
+
+volumes:
+  fintech_db_data:
